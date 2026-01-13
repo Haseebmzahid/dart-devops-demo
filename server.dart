@@ -23,7 +23,7 @@ void main() async {
     try {
       await command.send_object(["INCR", "visitors"]);
       var count = await command.send_object(["GET", "visitors"]);
-      return Response.ok('Hello from Dart! You are visitor number: $count\n');
+      return Response.ok('WELCOME TO VERSION 2! The visitor count is: $count\n');
     } catch (e) {
       return Response.ok('Hello from Dart! (Redis database is warming up)\n');
     }

@@ -1,31 +1,28 @@
-name: DevOps Build Pipeline
+name: Build and Publish
 
-# 1. THE TRIGGER
-# Wake up whenever code is pushed to the "main" branch
 on:
   push:
     branches: [ "main" ]
 
-# 2. THE JOBS
 jobs:
-  build-test:
-    # Run this job on a virtual Linux machine provided by GitHub
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Step A: Download your code from the repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step B: Log the start time (Optional, just for clarity)
-      - name: Start Build
-        run: echo "Starting the Docker build process..."
+      # Step 1: Login to Docker Hub using the secrets you just saved
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step C: Attempt to build the Docker image
-      # If your code has errors, this step will FAIL and alert you
-      - name: Build Docker Image
-        run: docker build . --file Dockerfile --tag my-dart-app:v1
-
-      # Step D: Verify the image exists
-      - name: List Images
-        run: docker images
+      # Step 2: Build AND Push the image
+      # We use a special variable ${{ github.sha }} to give every image a unique ID
+      - name: Build and Push
+        run: |
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/dart-redis-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/dart-redis-app:latest
+          echo "Image successfully pushed to Docker Hub!"

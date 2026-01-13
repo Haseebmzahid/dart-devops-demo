@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  # Service 1: Our Dart App
+  dart-app:
+    build: .
+    ports:
+      - "8080:8080"  # Map laptop 8080 to container 8080
+    depends_on:
+      - redis
+
+  # Service 2: The Database
+  redis:
+    image: redis:alpine

@@ -1,0 +1,9 @@
+name: dart_redis_counter
+description: A simple web server.
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  shelf: ^1.4.0      # Library to create a Web Server
+  shelf_router: ^1.1.0
+  redis: ^3.0.0      # Library to talk to Redis Database

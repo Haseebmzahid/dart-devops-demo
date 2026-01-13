@@ -1,0 +1,31 @@
+name: DevOps Build Pipeline
+
+# 1. THE TRIGGER
+# Wake up whenever code is pushed to the "main" branch
+on:
+  push:
+    branches: [ "main" ]
+
+# 2. THE JOBS
+jobs:
+  build-test:
+    # Run this job on a virtual Linux machine provided by GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step A: Download your code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step B: Log the start time (Optional, just for clarity)
+      - name: Start Build
+        run: echo "Starting the Docker build process..."
+
+      # Step C: Attempt to build the Docker image
+      # If your code has errors, this step will FAIL and alert you
+      - name: Build Docker Image
+        run: docker build . --file Dockerfile --tag my-dart-app:v1
+
+      # Step D: Verify the image exists
+      - name: List Images
+        run: docker images
